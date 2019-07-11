@@ -2,10 +2,10 @@
 #define _GL_WARPER
 #include "ofMain.h"
 // ofxGLWarper by Roy Macdonald
-// ... / ... 
+// ... / ...
 //
 // -- little changes made by Eloi Maduell - 12/2011
-// -- thanks to Arturo and hv_francesco 
+// -- thanks to Arturo and hv_francesco
 // added resolution of the quad in setup()
 // changed draw() to begin() end() model
 // added fromScreenToWarpCoord() and fromWarpToScreenCoord()
@@ -13,7 +13,7 @@
 
 
 class ofxGLWarper{
-	
+
 public:
     enum CornerLocation{
         TOP_LEFT,
@@ -21,20 +21,20 @@ public:
         BOTTOM_RIGHT,
         BOTTOM_LEFT
     };
-    
+
     ~ofxGLWarper();
-	void setup();		
-	void setup(int _resX, int _resY); //changed to have resolution as parameter for the quad
-	void setup(int _x, int _y, int _w, int _h);
+    void setup();
+    void setup(int _resX, int _resY); //changed to have resolution as parameter for the quad
+    void setup(int _x, int _y, int _w, int _h);
 
     void reSetupWarped(int _x, int _y, int _w, int _h); // allows you to redefine base rectangle without losing the current warping.
 
     void draw();	// This is deprecated (included in end()). Please check the drawSettings structure below.
-	void begin();	//changed name from draw to begin
-	void end();		//added to make it easier to use, similar to ofFbo (begin,end)
-		
-	void mouseDragged(ofMouseEventArgs &args);
-	void mousePressed(ofMouseEventArgs &args);
+    void begin();	//changed name from draw to begin
+    void end();		//added to make it easier to use, similar to ofFbo (begin,end)
+
+    void mouseDragged(ofMouseEventArgs &args);
+    void mousePressed(ofMouseEventArgs &args);
     void mouseReleased(ofMouseEventArgs &args){}
     void mouseMoved(ofMouseEventArgs &args){}
     void mouseScrolled(ofMouseEventArgs &args){}
@@ -42,7 +42,7 @@ public:
     void mouseExited(ofMouseEventArgs &args){}
     void keyPressed(ofKeyEventArgs &args);
     void keyReleased(ofKeyEventArgs &args){}
-    
+
     void processMatrices();
 
     void save(const string& saveFile = "warpConfig.xml");
@@ -97,9 +97,9 @@ public:
     drawSettings drawSettings;
 
 private:
-	int x, y;
-	int  width; //width of the quad to work with
-	int	 height; // height of the quad to work with
+    int x, y;
+    int  width; //width of the quad to work with
+    int	 height; // height of the quad to work with
     bool active = false;
     int selectedCorner;
     glm::mat4 myMatrix;

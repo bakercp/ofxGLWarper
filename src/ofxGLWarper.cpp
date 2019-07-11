@@ -153,18 +153,44 @@ void ofxGLWarper::end(){
         ofSetColor(drawSettings.rectangleColor);
         ofNoFill();
         ofDrawRectangle(x, y, width, height);
+        ofPopStyle();
     }
+
     ofPopMatrix();
+
     if ((drawSettings.bDrawCorners && active) || (drawSettings.bDrawCorners && drawSettings.bForceDrawing)) {// this draws colored squares over the corners as a visual aid.
-        ofSetRectMode(OF_RECTMODE_CENTER);
+        ofPushStyle();
         for (int i = 0; i < 4; i++) {
+            ofSetRectMode(OF_RECTMODE_CENTER);
+            int rectSize = 10;
+            ofFill();
             if(i==selectedCorner){
+                ofNoFill();
                 ofSetColor(drawSettings.selectedCornerColor);
+                rectSize = 30;
             }else{
                 ofSetColor(drawSettings.cornersColor);
             }
-            ofFill();
-            ofDrawRectangle(corners[i], 10, 10);
+
+            ofDrawRectangle(corners[i], rectSize, rectSize);
+
+            glm::vec2 labelPosition = corners[i];
+
+            if (i == 0)
+                labelPosition += { 40, 40 };
+            else if (i == 1)
+                labelPosition += { -40, 40 };
+            else if (i == 2)
+                labelPosition += { -40, -40 };
+            else if (i == 3)
+                labelPosition += { 40, -40 };
+
+            ofSetRectMode(OF_RECTMODE_CORNER);
+
+            ofPushMatrix();
+            ofTranslate(labelPosition);
+            ofDrawBitmapStringHighlight(ofToString(i), 0, 0);
+            ofPopMatrix();
         }
         ofPopStyle();
     }
@@ -177,11 +203,11 @@ void ofxGLWarper::save(const string &saveFile){
 }
 //--------------------------------------------------------------
 void ofxGLWarper::saveToXml(ofXml &XML, const string& warperID){
-    
+
     XML.removeChild(warperID);//if child doesn't exist yet, it's ok.
     auto c = XML.appendChild(warperID);
     for(int i =0; i<4; i++){
-		auto nc = c.appendChild("corner");
+        auto nc = c.appendChild("corner");
         nc.appendChild("x").set(corners[i]->x);
         nc.appendChild("y").set(corners[i]->y);
     }
@@ -204,18 +230,18 @@ void ofxGLWarper::loadFromXml(ofXml &XML, const string& warperID){
         ofLog(OF_LOG_ERROR, "ofxGLWarper : incorrrect xml formating. No \"" + warperID + "\" tag found");
         return;
     }
-	
+
     if (c.find("corner").size()<4 ) {
         ofLog(OF_LOG_ERROR, "ofxGLWarper : incorrrect xml formating. less than 4 \"corner\" tags found");
         return;
     }
-	auto cor = c.getChildren("corner");
-	int i = 0;
-	for(auto& ch: cor){
+    auto cor = c.getChildren("corner");
+    int i = 0;
+    for(auto& ch: cor){
         if(i<4){
             corners[i] = glm::vec2(ch.getChild("x").getFloatValue(), ch.getChild("y").getFloatValue());
-        } 
-		i++;
+        }
+        i++;
     }
 
     this->activate(c.getChild("active").getBoolValue());
@@ -253,28 +279,46 @@ void ofxGLWarper::mousePressed(ofMouseEventArgs &args){
 
 //--------------------------------------------------------------
 void ofxGLWarper::keyPressed(ofKeyEventArgs &args){
-    if (selectedCorner != -1) {
         switch (args.key) {
+            case '0':
+                selectedCorner = 0;
+                break;
+            case '1':
+                selectedCorner = 1;
+                break;
+            case '2':
+                selectedCorner = 2;
+                break;
+            case '3':
+                selectedCorner = 3;
+                break;
             case OF_KEY_DOWN:
-                corners[selectedCorner] += glm::vec2(0,1);
-                processMatrices();
+                if (selectedCorner != -1) {
+                    corners[selectedCorner] += glm::vec2(0,1);
+                    processMatrices();
+                }
                 break;
             case OF_KEY_UP:
-                corners[selectedCorner] += glm::vec2(0,-1);
-                processMatrices();
+                if (selectedCorner != -1) {
+                    corners[selectedCorner] += glm::vec2(0,-1);
+                    processMatrices();
+                }
                 break;
             case OF_KEY_LEFT:
-                corners[selectedCorner] += glm::vec2(-1,0);
-                processMatrices();
+                if (selectedCorner != -1) {
+                    corners[selectedCorner] += glm::vec2(-1,0);
+                    processMatrices();
+                }
                 break;
             case OF_KEY_RIGHT:
-                corners[selectedCorner] += glm::vec2(1,0);
-                processMatrices();
+                if (selectedCorner != -1) {
+                    corners[selectedCorner] += glm::vec2(1,0);
+                    processMatrices();
+                }
                 break;
             default:
-			break;
-		}
-	}
+            break;
+        }
 }
 
  //--------------------------------------------------------------

@@ -15,7 +15,7 @@ void ofxGLWarper::setup(int _resX, int _resY){
 }
 //--------------------------------------------------------------
 void ofxGLWarper::setup(int _x, int _y, int _w, int _h){
-    ofLogVerbose() << "ofxGLWarper setup: " <<_x << " " <<_y << " " <<_w << " " <<_h << endl;
+    ofLogVerbose("ofxGLWarper::setup") << _x << " " <<_y << " " <<_w << " " <<_h << endl;
 
     corners[TOP_LEFT] =     glm::vec2( _x      , _y        );
     corners[TOP_RIGHT] =    glm::vec2( _x + _w , _y        );
@@ -217,7 +217,7 @@ void ofxGLWarper::saveToXml(ofXml &XML, const string& warperID){
 void ofxGLWarper::load(const string &loadFile){
     ofXml XML;
     if( !XML.load(loadFile) ){
-        ofLog(OF_LOG_ERROR, "ofxGLWarper : xml file not loaded. Check file path.");
+        ofLogError("ofxGLWarper::load") << "xml file not loaded. Check file path.";
         return;
     }
     loadFromXml(XML);
@@ -227,12 +227,12 @@ void ofxGLWarper::load(const string &loadFile){
 void ofxGLWarper::loadFromXml(ofXml &XML, const string& warperID){
     auto c = XML.getChild(warperID);
     if(!c){
-        ofLog(OF_LOG_ERROR, "ofxGLWarper : incorrrect xml formating. No \"" + warperID + "\" tag found");
+        ofLogError("ofxGLWarper::loadFromXml") << "Incorrrect xml formating. No \"" + warperID + "\" tag found.";
         return;
     }
 
     if (c.find("corner").size()<4 ) {
-        ofLog(OF_LOG_ERROR, "ofxGLWarper : incorrrect xml formating. less than 4 \"corner\" tags found");
+        ofLogError("ofxGLWarper::loadFromXml") << "Incorrrect xml formating. Less than 4 \"corner\" tags found.";
         return;
     }
     auto cor = c.getChildren("corner");
@@ -269,7 +269,7 @@ void ofxGLWarper::mousePressed(ofMouseEventArgs &args){
         float distx = corners[i]->x - args.x;
         float disty = corners[i]->y - args.y;
         float dist  = sqrtf( distx * distx + disty * disty);
-        ofLogVerbose() << "mouse to corner dist: " << dist << endl;
+        ofLogVerbose("ofxGLWarper::mousePressed") << "mouse to corner dist: " << dist;
         if(dist < smallestDist && dist < sensFactor ){
             selectedCorner = i;
             smallestDist = dist;

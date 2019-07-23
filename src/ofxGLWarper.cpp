@@ -15,7 +15,7 @@ void ofxGLWarper::setup(int _resX, int _resY){
 }
 //--------------------------------------------------------------
 void ofxGLWarper::setup(int _x, int _y, int _w, int _h){
-    ofLogVerbose("ofxGLWarper::setup") << _x << " " <<_y << " " <<_w << " " <<_h << endl;
+    ofLogVerbose("ofxGLWarper::setup") << _x << " " <<_y << " " <<_w << " " <<_h;
 
     corners[TOP_LEFT] =     glm::vec2( _x      , _y        );
     corners[TOP_RIGHT] =    glm::vec2( _x + _w , _y        );
